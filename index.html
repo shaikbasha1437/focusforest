@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FocusForest</title>
+<meta name="description" content="A Pomodoro focus timer that grows a pixel-art forest. Runs entirely in your browser.">
+<meta name="theme-color" content="#101a14">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="top">
+  <h1><img src="icon.svg" alt="" width="28" height="28"> FocusForest</h1>
+  <nav><button id="openSettings" class="ghost" title="Settings (S)">⚙ Settings</button><button id="openHelp" class="ghost" title="Shortcuts (?)">⌨</button></nav>
+</header>
+<main>
+  <section class="card timer-card">
+    <div class="phases" role="tablist">
+      <button data-phase="focus" class="phase">Focus</button><button data-phase="short" class="phase">Short break</button><button data-phase="long" class="phase">Long break</button>
+    </div>
+    <div class="grow-wrap"><canvas id="growing" width="192" height="192" aria-label="Growing tree"></canvas></div>
+    <div id="time" class="time" aria-live="off">25:00</div>
+    <div class="bar"><div id="bar"></div></div>
+    <div id="cycle" class="muted">Session 1 · long break after 4</div>
+    <input id="task" type="text" maxlength="120" placeholder="What are you focusing on? (optional)" aria-label="Task label">
+    <div class="controls">
+      <button id="reset" class="ghost" title="Reset (R)">↺ Reset</button>
+      <button id="startPause" class="primary" title="Start / pause (Space)">Start</button>
+      <button id="skip" class="ghost" title="Skip (N)">Skip ⏭</button>
+    </div>
+    <div class="row species-row"><label for="species">Next tree</label><select id="species"></select></div>
+  </section>
+
+  <section class="card sound-card">
+    <h2>Ambient sound</h2>
+    <div class="sounds">
+      <button data-sound="off" class="chip">Off</button><button data-sound="rain" class="chip">🌧 Rain</button><button data-sound="wind" class="chip">🌬 Wind</button><button data-sound="brown" class="chip">🟤 Brown noise</button><button data-sound="forest" class="chip">🐦 Forest</button>
+    </div>
+    <label class="row">Volume <input id="volume" type="range" min="0" max="1" step="0.01" value="0.5"></label>
+  </section>
+
+  <section class="card stats-card">
+    <h2>Stats</h2>
+    <div id="stats" class="stats"></div>
+    <svg id="week" class="week" viewBox="0 0 280 110" role="img" aria-label="Focus minutes over the last 7 days"></svg>
+  </section>
+
+  <section class="card forest-card">
+    <div class="forest-head"><h2>Your forest</h2><span id="forestCount" class="muted"></span></div>
+    <div id="forest" class="forest"></div>
+    <p id="forestEmpty" class="muted">Finish a focus session to plant your first tree.</p>
+    <h3>Species</h3>
+    <ul id="unlocks" class="unlocks"></ul>
+  </section>
+
+  <section class="card history-card">
+    <h2>History</h2>
+    <ul id="history" class="history"></ul>
+    <div class="row wrap">
+      <button id="export" class="ghost">Export JSON</button>
+      <label class="ghost filebtn">Import JSON<input id="import" type="file" accept="application/json,.json" hidden></label>
+      <button id="clear" class="ghost danger">Clear all</button>
+    </div>
+  </section>
+</main>
+
+<dialog id="settings">
+  <form method="dialog" id="settingsForm">
+    <h2>Settings</h2>
+    <div class="grid2">
+      <label>Focus (min)<input name="focus" type="number" min="1" max="180"></label>
+      <label>Short break (min)<input name="short" type="number" min="1" max="60"></label>
+      <label>Long break (min)<input name="long" type="number" min="1" max="90"></label>
+      <label>Long break every<input name="longEvery" type="number" min="1" max="12"></label>
+    </div>
+    <label class="check"><input name="autoStart" type="checkbox"> Auto-start next phase</label>
+    <label class="check"><input name="chime" type="checkbox"> Chime when a phase ends</label>
+    <label class="check"><input name="notify" type="checkbox"> Browser notification when a phase ends</label>
+    <label class="check"><input name="stumps" type="checkbox"> Leave a withered stump if I abandon a focus session</label>
+    <menu><button value="cancel" class="ghost">Cancel</button><button value="save" class="primary" id="saveSettings">Save</button></menu>
+  </form>
+</dialog>
+<dialog id="help">
+  <form method="dialog">
+    <h2>Keyboard shortcuts</h2>
+    <dl class="keys"><dt>Space</dt><dd>Start / pause</dd><dt>R</dt><dd>Reset</dd><dt>N</dt><dd>Skip to next phase</dd><dt>1 / 2 / 3</dt><dd>Focus / short / long</dd><dt>M</dt><dd>Mute / unmute ambient</dd><dt>T</dt><dd>Edit task label</dd><dt>S</dt><dd>Settings</dd><dt>?</dt><dd>This help</dd></dl>
+    <menu><button class="primary">Close</button></menu>
+  </form>
+</dialog>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<footer>Everything stays in your browser (localStorage). Open source, MIT. <a href="https://github.com/shaikbasha1437/focusforest">Source</a></footer>
+<script src="core.js"></script>
+<script src="forest.js"></script>
+<script src="sound.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

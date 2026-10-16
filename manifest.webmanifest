@@ -1,0 +1,1 @@
+{ "name": "FocusForest", "short_name": "FocusForest", "start_url": "./", "scope": "./", "display": "standalone", "background_color": "#101a14", "theme_color": "#101a14", "description": "Pomodoro focus timer that grows a pixel forest.", "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }] }
