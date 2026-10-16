@@ -73,7 +73,7 @@
     document.querySelectorAll('.phase').forEach((b) => b.classList.toggle('active', b.dataset.phase === timer.phase));
     document.body.classList.toggle('break', timer.phase !== 'focus');
     const n = (ui.cycle % settings.longEvery) + 1;
-    $('cycle').textContent = timer.phase === 'focus' ? 'Session ' + n + ' of ' + settings.longEvery + ' · long break after ' + settings.longEvery : name + ' · ' + ui.cycle + ' trees planted this cycle run';
+    $('cycle').textContent = timer.phase === 'focus' ? 'Session ' + n + ' of ' + settings.longEvery + ' · long break after ' + settings.longEvery : name + ' · ' + ui.cycle + (ui.cycle === 1 ? ' session' : ' sessions') + ' done';
     const stage = timer.phase === 'focus' ? C.treeStage(p) : 4;
     const key = stage + timer.phase + nextSpecies();
     if (key !== lastStage) { lastStage = key; gctx.clearRect(0, 0, 192, 192); F.drawTree(gctx, timer.phase === 'focus' ? nextSpecies() : 'oak', timer.phase === 'focus' ? stage : 0, false, 12); if (timer.phase !== 'focus') { gctx.fillStyle = '#9db39f'; gctx.font = '28px system-ui'; gctx.textAlign = 'center'; gctx.fillText('☕', 96, 80); } }
@@ -85,7 +85,7 @@
       [s.streak + (s.streak === 1 ? ' day' : ' days'), 'current streak'], [s.bestStreak + (s.bestStreak === 1 ? ' day' : ' days'), 'best streak'], [s.totalSessions, 'trees total'],
     ].map(([v, l]) => '<div class="stat"><b>' + v + '</b><span>' + l + '</span></div>').join('');
     const max = Math.max(25, ...s.week.map((w) => w.minutes));
-    $('week').innerHTML = s.week.map((w, i) => { const h = (w.minutes / max) * 80; const x = 10 + i * 38; return '<rect class="b' + (i === 6 ? ' today' : '') + '" x="' + x + '" y="' + (88 - h) + '" width="26" height="' + Math.max(h, 1) + '" rx="3"><title>' + w.minutes.toFixed(0) + ' min</title></rect><text x="' + (x + 13) + '" y="104" text-anchor="middle">' + w.label + '</text>' + (w.minutes ? '<text x="' + (x + 13) + '" y="' + (84 - h) + '" text-anchor="middle">' + Math.round(w.minutes) + '</text>' : ''); }).join('');
+    $('week').innerHTML = s.week.map((w, i) => { const h = (w.minutes / max) * 70; const x = 10 + i * 38; return '<rect class="b' + (i === 6 ? ' today' : '') + '" x="' + x + '" y="' + (88 - h) + '" width="26" height="' + Math.max(h, 1) + '" rx="3"><title>' + w.minutes.toFixed(0) + ' min</title></rect><text x="' + (x + 13) + '" y="104" text-anchor="middle">' + w.label + '</text>' + (w.minutes ? '<text x="' + (x + 13) + '" y="' + (84 - h) + '" text-anchor="middle">' + Math.round(w.minutes) + '</text>' : ''); }).join('');
     const forest = $('forest'); forest.innerHTML = '';
     history.forEach((h) => { const d = document.createElement('div'); d.className = 'tile' + (h.id === newTreeId ? ' new' : ''); d.title = (h.completed ? h.species : 'Withered stump') + ' · ' + Math.round(h.minutes) + ' min' + (h.task ? ' · ' + h.task : '') + ' · ' + new Date(h.end).toLocaleString(); d.appendChild(F.renderTile(h.species, 4, !h.completed, 64)); forest.appendChild(d); });
     $('forestEmpty').hidden = history.length > 0;
